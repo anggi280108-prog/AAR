@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pendaftaran Harga Menu Nasi Goreng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffe6f0;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #d63384;
+    }
+    form {
+      max-width: 500px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #d63384;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background: #ff66a3;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #d63384;
+    }
+    #status {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pendaftaran Menu Nasi Goreng</h1>
+  <form id="menuForm">
+    <label for="nama">Nama Menu</label>
+    <input type="text" id="nama" name="nama" placeholder="Nasi Goreng Merah" required>
+
+    <label for="harga">Harga</label>
+    <input type="number" id="harga" name="harga" placeholder="25000" required>
+
+    <label for="deskripsi">Deskripsi</label>
+    <textarea id="deskripsi" name="deskripsi" placeholder="Contoh: Nasi goreng merah pedas dengan telur dan ayam" required></textarea>
+
+    <button type="submit">Simpan ke Spreadsheet</button>
+    <div id="status"></div>
+  </form>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyE3LhQYa5qwIS2EroYqZxJ5M7mB9YTAsvIDw2AFdmTTpCaIO4JJnrJzioNtxbdy3hY/exec"; // ganti dengan URL Web App dari Apps Script
+
+    const form = document.getElementById("menuForm");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      status.textContent = "Menyimpan...";
+
+      fetch(scriptURL, { method: "POST", body: new FormData(form)})
+        .then(response => {
+          if (response.ok) {
+            status.style.color = "green";
+            status.textContent = "Data berhasil disimpan ✅";
+            form.reset();
+          } else {
+            status.style.color = "red";
+            status.textContent = "Gagal menyimpan data ❌";
+          }
+        })
+        .catch(error => {
+          status.style.color = "red";
+          status.textContent = "Error: " + error.message;
+        });
+    });
+  </script>
+</body>
+</html>
